@@ -17,8 +17,10 @@ function App() {
     }
 
     try {
+      const baseUrl = process.env.REACT_APP_API_URL;
+      console.log({baseUrl});
       // Replace 'http://localhost:8081' with your backend URL or docker container URL
-      const response = await axios.post("http://localhost:8081/", { actualUrl: url });
+      const response = await axios.post(baseUrl, { actualUrl: url });
       
       // Assuming the response contains the shortened URL
       setShortUrl(response.data.shortUrl);
