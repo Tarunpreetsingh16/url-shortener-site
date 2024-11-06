@@ -1,0 +1,38 @@
+version: "3.9"
+services:
+  url-shortener-site:
+    build: .
+    ports:
+      - "8082:80"
+    depends_on:
+      - jim-jam-url-shortener-service
+
+  jim-jam-url-shortener-service:
+    image: url_shortener-jim-jam-url-shortener-service:latest
+    ports:
+      - "8081:8080"
+    environment:
+      - KEY_GENERATION_SERVICE_URL=http://key-generation-service:8080
+      - DOMAIN=http://localhost:8081
+      - SPRING_DATA_MONGODB_URI=mongodb://mongodb:27017/mappedKeys
+    depends_on:
+      - key-generation-service
+
+  key-generation-service:
+    image: key-generation-service:latest
+    ports:
+      - "8080:8080"
+    environment:
+      - SPRING_DATA_MONGODB_URI=mongodb://mongodb:27017/keys
+    depends_on:
+      - mongodb
+
+  mongodb:
+    image: mongo:latest
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodb_data:/data/db
+
+volumes:
+  mongodb_data:
