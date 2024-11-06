@@ -10,6 +10,9 @@ COPY package*.json ./
 # Step 4: Install the app dependencies
 RUN npm install
 
+# Copy the environment file
+COPY .env.production .env.production
+
 # Step 5: Copy the entire project into the container
 COPY . .
 
